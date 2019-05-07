@@ -6,7 +6,8 @@ import time
 # if platform is macOS and board is Arduino DUE
 if platform.system() == "Darwin":
     board = Arduino('/dev/cu.usbmodem14101')
-
+elif platform.system() == "Windows":
+    board = Arduino('COM5')
 
 def main():
     img = cv2.imread('img/lena.png',1)
@@ -17,7 +18,7 @@ def main():
 
 if __name__ == "__main__":
     while True:
-        board.digital[13].write(1)
-        time.sleep(1)
-        board.digital[13].write(0)
-        time.sleep(0.5)
+         board.digital[13].write(1)
+         time.sleep(1)
+         board.digital[13].write(0)
+         time.sleep(0.5)
