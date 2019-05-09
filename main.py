@@ -1,13 +1,9 @@
 import cv2
-from pyfirmata import Arduino, util
-import platform
 import time
+from arduinoHandler import arduinoHandler
 
-# if platform is macOS and board is Arduino DUE
-if platform.system() == "Darwin":
-    board = Arduino('/dev/cu.usbmodem14101')
-elif platform.system() == "Windows":
-    board = Arduino('COM5')
+PWM_3 = 'd:3:p'
+LED_BUILTIN = 13
 
 def main():
     img = cv2.imread('img/lena.png',1)
@@ -16,9 +12,13 @@ def main():
     cv2.destroyAllWindows()
 
 
-if __name__ == "__main__":
+def blink():
+    due = arduinoHandler()
     while True:
-         board.digital[13].write(1)
-         time.sleep(1)
-         board.digital[13].write(0)
-         time.sleep(0.5)
+        due.digitalWrite(LED_BUILTIN, True)
+        time.sleep(1)
+        due.digitalWrite(LED_BUILTIN, False)
+        time.sleep(0.5)
+
+if __name__ == "__main__":
+    blink()
