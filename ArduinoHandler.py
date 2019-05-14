@@ -3,7 +3,7 @@ import serial.tools.list_ports
 import string
 from pyfirmata import Arduino, util
 
-class arduinoHandler:
+class ArduinoHandler:
     def __init__(self):
         port = self.__getPort()
         if port is None:

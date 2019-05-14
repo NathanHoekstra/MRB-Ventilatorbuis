@@ -1,6 +1,6 @@
 import cv2
 import time
-from arduinoHandler import arduinoHandler
+from ArduinoHandler import ArduinoHandler
 import imutils
 
 PWM_3 = 'd:3:p'
