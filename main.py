@@ -12,7 +12,7 @@ def main():
     objectTracker = ObjectTracker()
     pidController = PIDController(1, 1, 1, 20)
 
-    pidController.setSetpoint(250)
+    pidController.setSetpoint(240)
 
     print("Program started, press q to quit the application")
     print("When using the ObjectTracker, press s to freeze a frame and use the mouse to select an object")
