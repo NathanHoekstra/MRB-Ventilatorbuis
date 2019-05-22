@@ -12,25 +12,28 @@ def main():
     objectTracker = ObjectTracker()
     pidController = PIDController(1, 1, 1, 20)
 
-    pidController.setSetpoint(250)
-
     print("Program started, press q to quit the application")
     print("When using the ObjectTracker, press s to freeze a frame and use the mouse to select an object")
 
     cap = cv2.VideoCapture(0)
-
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
         height, width = frame.shape[:2]
-        window_title = "Object detection W: " + str(width) + " H: " + str(height)
+        windowTitle = "Object detection W: " + str(width) + " H: " + str(height)
 
 
         frame = ballDetector.locateBall(frame)
-        #objectTracker.trackObject(frame)
-        pidController.setBallPosition(ballDetector.ballPosition)
-        # Display the resulting frame
-        cv2.imshow(window_title, frame)
+        objectTracker.trackObject(frame, windowTitle)
+
+        ballPosition = ballDetector.getBallPosition()
+        objectPosition = objectTracker.getObjectPosition()
+
+        if ballPosition is not None:
+            pidController.setBallPosition(ballPosition)
+        if objectPosition is not None:
+            pidController.setSetpoint(objectTracker.getObjectPosition())
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

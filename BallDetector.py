@@ -26,9 +26,9 @@ def grabContours(contours):
 """
 class BallDetector:
     def __init__(self, ballLower, ballUpper):
-        self.ballPosition = None
-        self.ballLower = ballLower
-        self.ballUpper = ballUpper
+        self.__ballPosition = None
+        self.__ballLower = ballLower
+        self.__ballUpper = ballUpper
 
     # Main BallDetector function
     def locateBall(self, frame):
@@ -36,7 +36,7 @@ class BallDetector:
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
-        mask = cv2.inRange(hsv, self.ballLower, self.ballUpper)
+        mask = cv2.inRange(hsv, self.__ballLower, self.__ballUpper)
         mask = cv2.erode(mask, None, iterations=2)
         mask = cv2.dilate(mask, None, iterations=2)
 
@@ -55,7 +55,8 @@ class BallDetector:
 
             M = cv2.moments(c)
             center = (int(M["m10"] / M["m00"]), int(M["m01"] / M["m00"]))
-            self.ballPosition = center
+
+            self.__ballPosition = center
             # only proceed if the radius meets a minimum size
             if radius > 10:
                 # draw the circle and centroid on the frame,
@@ -65,3 +66,6 @@ class BallDetector:
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
         # Return the frame
         return frame
+
+    def getBallPosition(self):
+        return self.__ballPosition
