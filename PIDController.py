@@ -40,7 +40,7 @@ class PIDController:
             self.__setPoint = setPoint[1]
 
     def setFrameRate(self, frameRate):
-        self.__Dt = frameRate
+        self.__Dt = 1  / frameRate
 
     def pwmOutput(self):
         self.__getError()

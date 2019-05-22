@@ -2,12 +2,15 @@ import cv2
 
 class ObjectTracker:
     def __init__(self):
-        self.__boundingBox = False
+        self.__boundingBox = None
         self.__tracker = cv2.TrackerKCF_create()
         self.__objectPosition = None
+        self.__isSelected = False
 
     def trackObject(self, frame, windowTitle):
         if self.__boundingBox is not None:
+            print("tracking")
+            self.__isSelected = True
             # grab the new bounding box coordinates of the object
             (success, box) = self.__tracker.update(frame)
 
@@ -35,3 +38,6 @@ class ObjectTracker:
 
     def getObjectPosition(self):
         return self.__objectPosition
+
+    def isSelected(self):
+        return self.__isSelected

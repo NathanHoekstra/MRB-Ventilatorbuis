@@ -21,13 +21,15 @@ def main():
         ret, frame = cap.read()
         fps = cap.get(cv2.CAP_PROP_FPS)
         height, width = frame.shape[:2]
-        windowTitle = "Object detection W: " + str(width) + " H: " + str(height)
+        windowTitle = "Object detection W: " + str(width) + " H: " + str(height) + " FPS: " + str(fps)
 
         frame = ballDetector.locateBall(frame)
         objectTracker.trackObject(frame, windowTitle)
 
-        pidController.setBallPosition(ballDetector.getBallPosition())
-        pidController.setSetpoint(objectTracker.getObjectPosition())
+        if objectTracker.isSelected():
+            pidController.setBallPosition(ballDetector.getBallPosition())
+            pidController.setSetpoint(objectTracker.getObjectPosition())
+            pidController.setFrameRate(fps)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
