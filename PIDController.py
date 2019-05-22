@@ -5,7 +5,7 @@ class PIDController:
         return self.setPoint - self.ballPosition[1]
 
     def __init__(self, Kp : int, Ki : int, Kd : int, pwmPin : int):
-        self.arduino = ArduinoHandler()
+        #self.arduino = ArduinoHandler()
         self.ballPosition = None
         self.setPoint = 250
         self.Kp = Kp

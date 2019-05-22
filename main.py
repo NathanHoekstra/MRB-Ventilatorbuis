@@ -22,12 +22,15 @@ def main():
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
+        height, width = frame.shape[:2]
+        window_title = "Object detection W: " + str(width) + " H: " + str(height)
+
 
         frame = ballDetector.locateBall(frame)
         #objectTracker.trackObject(frame)
         pidController.setBallPosition(ballDetector.ballPosition)
         # Display the resulting frame
-        cv2.imshow('frame', frame)
+        cv2.imshow(window_title, frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
