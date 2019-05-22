@@ -22,17 +22,11 @@ def main():
         height, width = frame.shape[:2]
         windowTitle = "Object detection W: " + str(width) + " H: " + str(height)
 
-
         frame = ballDetector.locateBall(frame)
         objectTracker.trackObject(frame, windowTitle)
 
-        ballPosition = ballDetector.getBallPosition()
-        objectPosition = objectTracker.getObjectPosition()
-
-        if ballPosition is not None:
-            pidController.setBallPosition(ballPosition)
-        if objectPosition is not None:
-            pidController.setSetpoint(objectTracker.getObjectPosition())
+        pidController.setBallPosition(ballDetector.getBallPosition())
+        pidController.setSetpoint(objectTracker.getObjectPosition())
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

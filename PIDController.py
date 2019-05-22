@@ -14,9 +14,11 @@ class PIDController:
         self.pwmPin = pwmPin
 
     def setBallPosition(self, ballPosition):
-        self.ballPosition = ballPosition[1]
+        if ballPosition is not None:
+            self.ballPosition = ballPosition[1]
         print(self.__getError())
 
     def setSetpoint(self, setPoint):
-        self.setPoint = setPoint[1]
+        if setPoint is not None:
+            self.setPoint = setPoint[1]
 
