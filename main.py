@@ -16,8 +16,13 @@ def main():
 
     print("Program started, press q to quit the application")
     print("When using the ObjectTracker, press s to freeze a frame and use the mouse to select an object")
-
     cap = cv2.VideoCapture(0)
+
+    '''
+    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M','J','P','G'))
+    cap.set(cv2.CAP_PROP_FPS, 60)
+    '''
+
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
