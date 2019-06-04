@@ -1,26 +1,5 @@
 import cv2
 
-def grabContours(contours):
-    # if the length the contours tuple returned by cv2.findContours
-    # is '2' then we are using either OpenCV v2.4, v4-beta, or
-    # v4-official
-    if len(contours) == 2:
-        contours = contours[0]
-
-    # if the length of the contours tuple is '3' then we are using
-    # either OpenCV v3, v4-pre, or v4-alpha
-    elif len(contours) == 3:
-        contours = contours[1]
-
-    # otherwise OpenCV has changed their cv2.findContours return
-    # signature yet again and I have no idea WTH is going on
-    else:
-        raise Exception("Contours tuple must have length 2 or 3")
-
-    # return the actual contours array
-    return contours
-
-
 """
     ----- BallDetector class -----
 """
@@ -42,7 +21,7 @@ class BallDetector:
 
         cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL,
                                 cv2.CHAIN_APPROX_SIMPLE)
-        cnts = grabContours(cnts)
+        cnts = cnts[0]
 
         # only proceed if at least one contour was found
         if len(cnts) > 0:

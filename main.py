@@ -3,6 +3,8 @@ from BallDetector import  BallDetector
 from ObjectTracker import ObjectTracker
 from PIDController import *
 
+from ArduinoHandler import ArduinoHandler
+import time
 
 def main():
     ballLower = (8, 130, 200)
@@ -38,5 +40,17 @@ def main():
     cap.release()
     cv2.destroyAllWindows()
 
+def firmataTest():
+    PWM_3 = 'd:3:p'
+    LED_BUILTIN = 13
+    nano = ArduinoHandler(3)
+    pwm = 400
+    while True:
+        nano.digitalWrite(True)
+        nano.delayMicroseconds(pwm)
+        nano.digitalWrite(False)
+        #nano.delayMicroseconds(0.001)
+
 if __name__ == "__main__":
-    main()
+    #main()
+    firmataTest()
