@@ -46,15 +46,14 @@ def main():
     cv2.destroyAllWindows()
 
 def firmataTest():
-    PWM_3 = 'd:3:p'
-    LED_BUILTIN = 13
-    nano = ArduinoHandler(3)
-    pwm = 400
+    nano = ArduinoHandler()
+    pwm = 1000
     while True:
         nano.digitalWrite(True)
-        nano.delayMicroseconds(pwm)
+        time.sleep(0.4054)
         nano.digitalWrite(False)
-        #nano.delayMicroseconds(0.001)
+        time.sleep(0.01)
+        #nano.delayMicroseconds(1)
 
 if __name__ == "__main__":
     #main()
