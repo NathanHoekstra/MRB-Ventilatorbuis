@@ -1,18 +1,18 @@
 import sys
 import serial.tools.list_ports
+import string
+from pyfirmata import Arduino, util
 import time
 
 class ArduinoHandler:
     def __init__(self):
-        self.__port = self.__getPort()
+        port = self.__getPort()
         self.__analogPort = None
-        if self.__port is None:
+        if port is None:
             print("No Arduino found!")
             sys.exit(1)
         else:
-            self.__serial = serial.Serial(self.__port, 119200, timeout=.1)
-            # Give the board time to reset, 4 seconds should be enough
-            time.sleep(4)
+            self.__board = Arduino(port)
             print("Board initialized!")
 
     # Get all com ports from OS and find the Arduino port
@@ -29,11 +29,16 @@ class ArduinoHandler:
                 return p.device
 
     # This function is used for writing to digital pins
-    def digitalWrite(self, value : bool):
-        if value:
-            self.__serial.write('1'.encode())
-        else:
-            self.__serial.write('0'.encode())
+    def digitalWrite(self, pin : int, value : bool):
+        self.__board.digital[pin].write(value)
+
+    # Set analogport to be used
+    def setAnalogPort(self, port : string):
+        self.__analogPort = self.__board.get_pin(port)
+
+    # This function is used for writing to analog pins
+    def analogWrite(self, value : float):
+        self.__analogPort.write(value)
 
     def delayMicroseconds(self, value : float):
         time.sleep(value / 1000)

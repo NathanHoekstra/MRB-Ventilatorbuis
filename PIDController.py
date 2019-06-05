@@ -20,6 +20,8 @@ class PIDController:
 
     def __init__(self, Kp : int, Ki : int, Kd : int, pwmPin : int):
         #self.arduino = ArduinoHandler()
+        self.__controlErrorUpper = 1000
+        self.__controlErrorLower = -self.__controlErrorUpper
         self.__errorSum = 1
         self.__previousError = 1
         self.__currentError = 1
@@ -45,4 +47,9 @@ class PIDController:
     def pwmOutput(self):
         self.__getError()
         self.__sumError()
-        return self.__calculateKp() + self.__calculateKd() + self.__calculateKi()
+        error = self.__calculateKp() + self.__calculateKd() + self.__calculateKi()
+        if error > self.__controlErrorUpper:
+            error = self.__controlErrorUpper
+        elif error < self.__controlErrorLower:
+            error = self.__controlErrorLower
+        return error
