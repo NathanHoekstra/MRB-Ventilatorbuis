@@ -50,6 +50,7 @@ def main():
 
         elif ballDetector.isBallFound() and not objectTracker.isSelected():
             pidController.controlPIDFan(ballDetector.getBallPosition(), mouseClickPosition, fps)
+
         else:
             nano.analogWrite(0.8)
 
