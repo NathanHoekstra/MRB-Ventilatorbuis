@@ -27,9 +27,6 @@ def main():
     cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M','J','P','G'))
     cap.set(cv2.CAP_PROP_FPS, 60)
 
-    nano.analogWrite(0.7)
-    time.sleep(7)
-
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
@@ -44,9 +41,12 @@ def main():
         if objectTracker.isSelected():
             pidController.controlPIDFan(ballDetector.getBallPosition(),
                                         objectTracker.getObjectPosition(), fps)
-        else:
+
+        elif ballDetector.isBallFound() and not objectTracker.isSelected():
             pidController.controlPIDFan(ballDetector.getBallPosition(),
                                         windowManager.midPoint, fps)
+        else:
+            nano.analogWrite(0.8)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

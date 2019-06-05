@@ -8,7 +8,7 @@ class BallDetector:
         self.__ballPosition = None
         self.__ballLower = ballLower
         self.__ballUpper = ballUpper
-        self.ballIsFound = False
+        self.__ballIsFound = False
 
     # Main BallDetector function
     def locateBall(self, frame):
@@ -26,7 +26,7 @@ class BallDetector:
 
         # only proceed if at least one contour was found
         if len(cnts) > 0:
-            self.ballIsFound = True
+            self.__ballIsFound = True
             # find the largest contour in the mask, then use
             # it to compute the minimum enclosing circle and
             # centroid
@@ -46,9 +46,12 @@ class BallDetector:
                            (0, 255, 255), 2)
                 cv2.circle(frame, center, 5, (0, 0, 255), -1)
         else:
-            self.ballIsFound = False
+            self.__ballIsFound = False
         # Return the frame
         return frame
 
     def getBallPosition(self):
         return self.__ballPosition
+
+    def isBallFound(self):
+        return self.__ballIsFound
