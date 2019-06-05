@@ -24,6 +24,8 @@ class ArduinoHandler:
         for p in ports:
             if 'Arduino' in p.description:
                 return p.device
+            elif 'CH340' in p.description:
+                return p.device
             # Fake Arduino Uno/Nano serial port (MacOS)
             elif '/dev/cu.wchusbserial' in p.device:
                 return p.device

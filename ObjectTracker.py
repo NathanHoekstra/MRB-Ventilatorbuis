@@ -9,7 +9,6 @@ class ObjectTracker:
 
     def trackObject(self, frame, windowTitle):
         if self.__boundingBox is not None:
-            print("tracking")
             self.__isSelected = True
             # grab the new bounding box coordinates of the object
             (success, box) = self.__tracker.update(frame)

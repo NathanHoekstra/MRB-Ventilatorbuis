@@ -18,8 +18,8 @@ class PIDController:
         self.__errorSum += self.__currentError
 
 
-    def __init__(self, Kp : int, Ki : int, Kd : int, pwmPin : int):
-        #self.arduino = ArduinoHandler()
+    def __init__(self, Kp : int, Ki : int, Kd : int, pwmPin : int, arduino : ArduinoHandler):
+        self.__arduino = arduino
         self.__controlErrorUpper = 1000
         self.__controlErrorLower = -self.__controlErrorUpper
         self.__errorSum = 1
@@ -33,23 +33,35 @@ class PIDController:
         self.__Dt = 0.05
         self.__pwmPin = pwmPin
 
-    def setBallPosition(self, ballPosition):
+    def __setBallPosition(self, ballPosition):
         if ballPosition is not None:
             self.__ballPosition = ballPosition[1]
 
-    def setSetpoint(self, setPoint):
+    def __setSetpoint(self, setPoint):
         if setPoint is not None:
             self.__setPoint = setPoint[1]
 
-    def setFrameRate(self, frameRate):
+    def __setFrameRate(self, frameRate):
         self.__Dt = 1  / frameRate
 
-    def pwmOutput(self):
+    def __pwmOutput(self):
         self.__getError()
         self.__sumError()
-        error = self.__calculateKp() + self.__calculateKd() + self.__calculateKi()
+        error = (self.__calculateKp() + self.__calculateKd() + self.__calculateKi())
         if error > self.__controlErrorUpper:
             error = self.__controlErrorUpper
         elif error < self.__controlErrorLower:
             error = self.__controlErrorLower
-        return error
+
+        commandSignal = round(error * -(1 / 1000) + 0.65, 3)
+        if commandSignal > 1:
+            commandSignal = 1
+        if commandSignal < 0:
+            commandSignal = 0
+        return commandSignal
+
+    def controlPIDFan(self, ballPosition, objectPosition, framerate):
+        self.__setBallPosition(ballPosition)
+        self.__setSetpoint(objectPosition)
+        self.__setFrameRate(framerate)
+        self.__arduino.analogWrite(self.__pwmOutput())
