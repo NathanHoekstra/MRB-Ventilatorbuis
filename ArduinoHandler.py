@@ -5,9 +5,8 @@ from pyfirmata import Arduino, util
 import time
 
 class ArduinoHandler:
-    def __init__(self, pin : int):
+    def __init__(self):
         port = self.__getPort()
-        self.__pin = pin
         self.__analogPort = None
         if port is None:
             print("No Arduino found!")
@@ -30,8 +29,8 @@ class ArduinoHandler:
                 return p.device
 
     # This function is used for writing to digital pins
-    def digitalWrite(self, value : bool):
-        self.__board.digital[self.__pin].write(value)
+    def digitalWrite(self, pin : int, value : bool):
+        self.__board.digital[pin].write(value)
 
     # Set analogport to be used
     def setAnalogPort(self, port : string):
