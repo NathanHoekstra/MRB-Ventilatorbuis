@@ -8,6 +8,10 @@ from ArduinoHandler import ArduinoHandler
 
 mouseClickPosition = (100, 300)
 
+def getFrequency(height : int, ballPosition):
+    scale = float(800) / height
+    return int(ballPosition[1] * -scale + 1100)
+
 def onMouseClickEvent(event, x, y, flags, params):
     global mouseClickPosition
     if event == cv2.EVENT_LBUTTONDBLCLK:
@@ -20,14 +24,13 @@ def main():
     windowManager = WindowManager()
     ballDetector = BallDetector(ballLower, ballUpper)
     objectTracker = ObjectTracker()
-    nano = ArduinoHandler()
-    pidController = PIDController(1, 1, 2, 20, nano)
-    nano.setAnalogPort('d:3:p')
+    arduinoControllers = ArduinoHandler()
+    pidController = PIDController(1, 1, 2, 20, arduinoControllers)
+    arduinoControllers.setAnalogPort('d:3:p')
 
     print("Program started, press q to quit the application")
     print("When using the ObjectTracker, press s to freeze a frame and use the mouse to select an object")
     cap = cv2.VideoCapture(0)
-
 
     cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc('M','J','P','G'))
     cap.set(cv2.CAP_PROP_FPS, 60)
@@ -45,14 +48,17 @@ def main():
         frame = ballDetector.locateBall(frame)
         objectTracker.trackObject(frame, windowTitle)
 
+        ballPosition = ballDetector.getBallPosition()
+
         if objectTracker.isSelected():
-            pidController.controlPIDFan(ballDetector.getBallPosition(), objectTracker.getObjectPosition(), fps)
+            arduinoControllers.frequencyWrite(getFrequency(height, ballPosition))
+            pidController.controlPIDFan(ballPosition, objectTracker.getObjectPosition(), fps)
 
         elif ballDetector.isBallFound() and not objectTracker.isSelected():
-            pidController.controlPIDFan(ballDetector.getBallPosition(), mouseClickPosition, fps)
+            pidController.controlPIDFan(ballPosition, mouseClickPosition, fps)
 
         else:
-            nano.analogWrite(0.8)
+            arduinoControllers.analogWrite(0.8)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

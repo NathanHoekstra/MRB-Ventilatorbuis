@@ -9,7 +9,7 @@ class ArduinoHandler:
         ports = self.__getPorts()
         self.__analogPort = None
         print(ports)
-        if ports is None or len(ports) < 2:
+        if ports.__contains__(None):
             print("Less then two Arduino's found!")
             sys.exit(1)
         else:
@@ -22,7 +22,7 @@ class ArduinoHandler:
     # Maybe there is a different function that we can use
     @staticmethod
     def __getPorts():
-        arduinos = ["",""]
+        arduinos = [None, None]
         ports = list(serial.tools.list_ports.comports())
         for p in ports:
             if 'Arduino' in p.description or 'CH340' in p.description:
@@ -30,7 +30,7 @@ class ArduinoHandler:
             # Fake Arduino Uno/Nano serial port (MacOS)
             elif '/dev/cu.wchusbserial' in p.device:
                 arduinos[0] = p.device
-            elif 'FT232R' in p.description:
+            elif 'FT232R' in p.description or 'USB Serial Port' in p.description:
                 arduinos[1] = p.device
         return arduinos
 
@@ -47,7 +47,7 @@ class ArduinoHandler:
         self.__analogPort.write(value)
 
     def frequencyWrite(self, frequency : int):
-        self.__speakerBoard.write(str(frequency).encode())
+        self.__speakerBoard.write(str(str(frequency) + '\n').encode())
 
     @staticmethod
     def delayMicroseconds(value : float):
