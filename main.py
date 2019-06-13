@@ -40,7 +40,7 @@ def main():
         height, width = frame.shape[:2]
 
         windowTitle = "Object detection W: " + str(width) + " H: " + str(height) + " FPS: " + str(fps)
-        cv2.setMouseCallback(windowTitle, onMouseClickEvent)
+        #cv2.setMouseCallback(windowTitle, onMouseClickEvent)
 
         frame = ballDetector.locateBall(frame)
         objectTracker.trackObject(frame, windowTitle)
