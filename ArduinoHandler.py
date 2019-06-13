@@ -1,14 +1,13 @@
 import sys
 import serial.tools.list_ports
 import string
-from pyfirmata import Arduino, util
+from pyfirmata import Arduino
 import time
 
 class ArduinoHandler:
     def __init__(self):
         ports = self.__getPorts()
         self.__analogPort = None
-        print(ports)
         if ports.__contains__(None):
             print("Less then two Arduino's found!")
             sys.exit(1)
@@ -33,10 +32,6 @@ class ArduinoHandler:
             elif 'FT232R' in p.description or 'USB Serial Port' in p.description:
                 arduinos[1] = p.device
         return arduinos
-
-    # This function is used for writing to digital pins
-    def digitalWrite(self, pin : int, value : bool):
-        self.__fanBoard.digital[pin].write(value)
 
     # Set analogport to be used
     def setAnalogPort(self, port : string):
